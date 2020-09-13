@@ -14,11 +14,17 @@ public:
 		x = 0;
 		y = 0;
 	}
-	void setValues() //задание параметров
+	void setValues(string n) //задание параметров
 	{
+    string to_x, to_y;
+    cout << "Введите название "<< n << " координаты" << endl;
 		cin >> name;
-		cin >> x;
-		cin >> y; //получение данных
+    cout << "Введите X для координаты " << name << endl;
+    cin >> to_x;
+    x = validate(to_x, "Координата точки X - некорректна\nВведите снова");
+    cout << "Введите Y для координаты " << name << endl;
+    cin >> to_y;
+    y = validate(to_y, "Координата точки Y - некорректна\nВведите снова");
 	}
 
 	float R(Dot object) //расстояние между 2 точками
@@ -28,19 +34,33 @@ public:
 		d = floor(d * 100) / 100;
 		return d;
 	}
+  private:
+    // Принимает строку, возвращает, является ли строка числом
+    bool is_digit(std::string s) {
+        const char *str = s.c_str();
+        while((*str< '0' || *str > '9') && *str != '-' && *str != '.' ? false : *str++); // valid -10.35
+        return !*str;
+    }
+    //Конвертирует строку твою в формат float
+    float to_float_digit(std::string s){
+      return atof(s.c_str());
+    }
+    float validate(string to_digit, string error){
+      while( !(is_digit(to_digit)) ){
+        cout << "Ошибка, " << error << endl;
+        cin >> to_digit;
+      }
+      return to_float_digit(to_digit);
+    }
 };
 class Delta //класс треугольника
 {
 public:
 	void setValues()  //задание параметров
 	{
-
-		cout << "Введите название u координаты первой точки через пробел : ";
-		cin >> A.name >> A.x >> A.y;
-		cout << "Введите название u координаты второй точки через пробел : ";
-		cin >> B.name >> B.x >> B.y;
-		cout << "Введите названиe u координаты третьей точки через пробел : ";
-		cin >> C.name >> C.x >> C.y;
+    A.setValues("первой");
+    B.setValues("второй");
+    C.setValues("третьей");
 	}
 	void calculate() //расчет периметра и площади
 	{
@@ -62,6 +82,7 @@ public:
 	}
 private:
 	Dot A, B, C;//создание объектов внутри класса треугольника
+
 };
 int main()
 {
@@ -74,12 +95,9 @@ int main()
 		if (function == "R")
 		{
 			cout << "Подсчет расстояния между двумя точками " << endl;
-			cout << "Введите название u координаты первой точки через пробел: ";
-			Dot first;
-			first.setValues();
-			cout << "Введите название и координаты второй точки через пробел: ";
-			Dot second;
-			second.setValues();
+			Dot first, second;
+			first.setValues("первой");
+			second.setValues("второй");
 			float D = first.R(second);
 			cout << "Расстояние между точками " << first.name << " и " << second.name << " равно: " << D;
 			cout << endl;
